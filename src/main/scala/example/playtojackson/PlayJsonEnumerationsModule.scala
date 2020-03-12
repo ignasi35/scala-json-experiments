@@ -1,3 +1,11 @@
+/**
+
+THIS IS UNFINISHED WORK AND UNUSED. As it is it is only a bunch of 
+copy/paste/rename from https://github.com/FasterXML/jackson-module-scala/blob/master/src/main/scala/com/fasterxml/jackson/module/scala/deser/EnumerationDeserializerModule.scala
+
+*/ 
+
+
 package example.playtojackson
 
 import com.fasterxml.jackson.core.JsonParser
