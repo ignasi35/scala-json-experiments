@@ -1,22 +1,40 @@
 package example
 
 import org.scalatest._
+import play.api.libs.json.Format
 import play.api.libs.json.JsValue
 import play.api.libs.json.Json
 
+import scala.reflect.ClassTag
+
 class PlayJsonSpec extends FlatSpec with Matchers {
-  "Round-trip Play" should "roundtrip" in {
+  import example.playjson.PlayJsonSerializers._
+  behavior of "Round-trip Play"
 
-    val expected = Examples.Rocinante
+  it should "roundtrip Person" in roundTrip(Examples.jamesHolden)
+  it should "roundtrip Crew" in roundTrip(Examples.captainJamesHolden)
+  it should "roundtrip Starship" in roundTrip(Examples.Rocinante)
 
-    import example.playjson.PlayJsonSerializers._
+  //  {"name":"Rocinante",
+  //  "crew":[...],
+  //  "route":[
+  //    "Earth",
+  //    "Mars",
+  //    "Earth",
+  //    "Venus"
+  //  ]
+  //  }
 
-    val jsonString: String = Json.prettyPrint(Json.toJson(Examples.Rocinante))
+  private def roundTrip[T: ClassTag](t: T)(implicit f: Format[T]): Unit = {
+    val jsonString: String = Json.stringify(Json.toJson(t))
+//    val jsonString: String = Json.prettyPrint(Json.toJson(t))
+
     println(jsonString)
+
     val jsValue: JsValue = Json.parse(jsonString)
-    val actual = jsValue.as[Starship]
 
-    actual should be(expected)
+    val actual = jsValue.as[T]
 
+    actual should be(t)
   }
 }
